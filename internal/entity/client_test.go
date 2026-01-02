@@ -51,3 +51,27 @@ func TestUpdateClientWhenAtgsAreInvalid(t *testing.T) {
 	assert.Equal(t, name, client.Name)
 	assert.Equal(t, email, client.Email)
 }
+
+func TestAddAccountToClient(t *testing.T) {
+	name := "John Doe"
+	email := "john@doe.com"
+	client, _ := NewClient(name, email)
+	account := NewAccount(client)
+	err := client.AddAccount(account)
+	assert.Nil(t, err)
+	assert.Equal(t, account, client.Accounts[0])
+}
+
+func TestAddAccountToClientWhenAccountDoesNotBelongToClient(t *testing.T) {
+	name1 := "John Doe"
+	email1 := "john@doe.com"
+	client1, _ := NewClient(name1, email1)
+
+	name2 := "Jane Doe"
+	email2 := "jane@doe.com"
+	client2, _ := NewClient(name2, email2)
+	account := NewAccount(client2)
+	err := client1.AddAccount(account)
+	assert.NotNil(t, err)
+	assert.Equal(t, 0, len(client1.Accounts))
+}
