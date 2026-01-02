@@ -39,3 +39,19 @@ func (c *Client) Validate() error {
 	}
 	return nil
 }
+
+func (c *Client) Update(name, email string) error {
+	originalName := c.Name
+	originalEmail := c.Email
+
+	c.Name = name
+	c.Email = email
+	c.UpdatedAt = time.Now()
+
+	if err := c.Validate(); err != nil {
+		c.Name = originalName
+		c.Email = originalEmail
+		return err
+	}
+	return nil
+}

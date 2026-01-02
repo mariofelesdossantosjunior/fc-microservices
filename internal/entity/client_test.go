@@ -25,3 +25,29 @@ func TestCreateNewClientWhenAtgsAreInvalid(t *testing.T) {
 	assert.Nil(t, client)
 	assert.NotNil(t, err)
 }
+
+func TestUpdateClient(t *testing.T) {
+	name := "John Doe"
+	email := "john@doe.com"
+	client, _ := NewClient(name, email)
+
+	newName := "Jane Doe"
+	newEmail := "jane@doe.com"
+	err := client.Update(newName, newEmail)
+	assert.Nil(t, err)
+	assert.Equal(t, newName, client.Name)
+	assert.Equal(t, newEmail, client.Email)
+}
+
+func TestUpdateClientWhenAtgsAreInvalid(t *testing.T) {
+	name := "John Doe"
+	email := "john@doe.com"
+	client, _ := NewClient(name, email)
+
+	newName := ""
+	newEmail := "invalid-email"
+	err := client.Update(newName, newEmail)
+	assert.NotNil(t, err)
+	assert.Equal(t, name, client.Name)
+	assert.Equal(t, email, client.Email)
+}
