@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"testing"
 
+	"github.com/mariofelesdossantosjunior/fc-microservices/internal/entity"
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -38,4 +40,17 @@ func (suite *ClientDBTestSuite) TearDownTest() {
 
 func TestClientDBTestSuite(t *testing.T) {
 	suite.Run(t, new(ClientDBTestSuite))
+}
+
+func (suite *ClientDBTestSuite) TestSaveAndGetClient() {
+	client, _ := entity.NewClient("John Doe", "john@example.com")
+
+	err := suite.clientDB.Save(client)
+	suite.Require().NoError(err)
+
+	retrievedClient, err := suite.clientDB.Get(client.ID)
+	suite.Require().NoError(err)
+	suite.Equal(client.ID, retrievedClient.ID)
+	suite.Equal(client.Name, retrievedClient.Name)
+	suite.Equal(client.Email, retrievedClient.Email)
 }
